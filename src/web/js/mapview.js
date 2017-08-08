@@ -1,16 +1,19 @@
 var osmSource = new ol.source.OSM();
 var _layers = [];
+osmSource.setTileLoadFunction(function(image, link) {
+    console.log(link)
+    image.Y().src = link;
+});
 
-var omsSource = new ol.layer.Tile({
+var layer = new ol.layer.Tile({
     source: osmSource
   });
 
-_layers.push(omsSource);
 
-// omsSource.setTileLoadFunction(function(image, link) {
-//     console.log(link);
-//     image.Y().src = link;
-// });
+
+_layers.push(layer);
+
+
 
 var map = new ol.Map({
 layers: _layers,
@@ -39,4 +42,13 @@ document.addEventListener("message", function(event) {
     console.log("Received post message", event);
 
     dataPassed.innerHTML = event.data;
+    zoom();
 }, false);
+
+function zoom() {
+    map.getView().setZoom(12);
+}
+
+function moveToLatLng() {
+
+}
