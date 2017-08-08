@@ -8,8 +8,6 @@ import {
     Text
 } from 'react-native';
 
-
-const htmlContent = require('../web/webview.html');
 const mapViewContent = require('../web/mapview.html');
 
 class MapView extends Component {
