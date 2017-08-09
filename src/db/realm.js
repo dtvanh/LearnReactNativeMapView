@@ -15,4 +15,13 @@ MapTile.schema = {
     },
 };
 
-export default new Realm({schema: [ MapTile ]});
+class Points extends Realm.Object {}
+Points.schema = {
+    name: 'Points',
+    properties: {
+        lat: {type: 'double', default: 0},
+        lng: {type: 'double', default: 0},
+    },
+};
+
+export default new Realm({schema: [ MapTile, Points ]});

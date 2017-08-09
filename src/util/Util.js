@@ -11,6 +11,9 @@ const downloadImage = (url) => {
      appendExt : 'png'
     });
 
+    let dir = RNFetchBlob.fs.dirs.DocumentDir;
+    debugger;
+
     return fetcher.fetch('GET', url);
     //    .then((resp) => {
     //        imagePath = resp.path();
@@ -25,6 +28,11 @@ const downloadImage = (url) => {
 
     // @WARNING: Must unlink after done with file
 }
+
+const convertToBase64String = (localPath) => {
+
+
+};
 
 
 export {downloadImage};
