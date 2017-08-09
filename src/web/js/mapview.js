@@ -4,8 +4,8 @@ var _layers = [];
 /********* Config Source Map *********/
 osmSource.setTileLoadFunction(function(image, link) {
     console.log(link)
-    image.Y().src = link;
-    window.postMessage(link);
+    image.Y().src = '/Users/anhduong/Library/Developer/CoreSimulator/Devices/1ACBD28A-4678-4452-9A9F-ADA914217EAC/data/Containers/Data/Application/B5A8DFC9-58D7-405D-AADF-7CB7B7454BB9/Documents/RNFetchBlob_tmp/RNFetchBlobTmp_9d870w6ztx86ll2upw289.png';
+    //window.postMessage(link);
 });
 
 var layer = new ol.layer.Tile({

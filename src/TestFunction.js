@@ -11,6 +11,7 @@ import {
     Image
 } from 'react-native';
 import {downloadImage} from './util/Util';
+import realm from './db/realm';
 
 class TestFunction extends Component {
 
@@ -52,9 +53,32 @@ class TestFunction extends Component {
     onTapDownloadBtn() {
 
         downloadImage('https://c.tile.openstreetmap.org/7/65/43.png')
-        .then((base64) => {
-
+        .then((_localPath) => {
+            debugger;
+            realm.write(() => {
+                realm.create('MapTile', {
+                    zoomLevel: 100,
+                    row: 65,
+                    column: 43,
+                    url: 'https://c.tile.openstreetmap.org/7/65/43.png',
+                    localPath: _localPath.data,
+                    creationDate: new Date()});
+            });
         })
+        .catch((err) => {
+            console.log(err.message);
+        })
+
+        /*
+        zoomLevel: {type: 'int', default: 0},
+        row: {type: 'int', default: 0},
+        column: {type: 'int', default: 0},
+        url: {type: 'string', default: ''},
+        localPath: {type: 'string', default: ''},
+        creationDate: 'date'
+
+
+        */
     }
 
 

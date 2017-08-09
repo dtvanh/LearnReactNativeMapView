@@ -43,3 +43,4 @@ export default class WevViewApp extends Component {
 }
 
 AppRegistry.registerComponent( 'InteractMapView', () => TestFunction );
+//AppRegistry.registerComponent( 'InteractMapView', () => WevViewApp );

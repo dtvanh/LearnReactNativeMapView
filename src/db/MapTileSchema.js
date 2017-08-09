@@ -1,3 +1,0 @@
-class MapTileSchema {}
-
-export MapTileSchema;

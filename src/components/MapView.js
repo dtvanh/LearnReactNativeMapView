@@ -1,3 +1,4 @@
+// @NOTE: Consider to delete or not
 import React, { Component } from 'react';
 import {
     WebView,
@@ -54,7 +55,7 @@ class MapView extends Component {
 
     _onComplete() {
         debugger;
-        this.webView.postMessage('Fucking bitch');
+        
     }
 
     _onMessage(data) {
