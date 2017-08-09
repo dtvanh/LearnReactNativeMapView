@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import {AppRegistry, Text, View, TouchableHighlight, WebView} from "react-native";
-import App from './src/App';
-
+import {AppRegistry, Text, View, TouchableHighlight, WebView, Alert} from "react-native";
+import TestFunction from './src/TestFunction';
 
 const mapViewContent = require('./src/web/mapview.html');
 
@@ -11,10 +10,14 @@ export default class WevViewApp extends Component {
         super( props );
 
         this.webView = null;
+        this.state = {
+            link: 'Image Link'
+        }
     }
 
     onMessage( event ) {
         console.log( "On Message", event.nativeEvent.data );
+        this.setState({link: event.nativeEvent.data});
     }
 
     sendPostMessage() {
@@ -25,18 +28,18 @@ export default class WevViewApp extends Component {
         return (
             <View style={{flex: 1}}>
                 <TouchableHighlight style={{padding: 10, backgroundColor: 'blue', marginTop: 20}} onPress={() => this.sendPostMessage()}>
-                    <Text style={{color: 'white'}}>Send post point data from RN</Text>
+                    <Text style={{color: 'white'}}>{this.state.link}</Text>
                 </TouchableHighlight>
 
                 <WebView
                     style={{flex: 1}}
                     source={mapViewContent}
                     ref={( webView ) => this.webView = webView}
-                    onMessage={this.onMessage}
+                    onMessage={this.onMessage.bind(this)}
                 />
             </View>
         );
     }
 }
 
-AppRegistry.registerComponent( 'InteractMapView', () => WevViewApp );
+AppRegistry.registerComponent( 'InteractMapView', () => TestFunction );
