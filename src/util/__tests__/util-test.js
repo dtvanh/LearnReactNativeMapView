@@ -1,14 +1,14 @@
-import { getXTileByLat, getYTileByLng } from '../Util';
+import { getYTileByLat, getXTileByLng } from '../Util';
 
 describe('Util', () => {
 
     it('convert lat to x tile grid', () => {
-        const result = true;
-        expect(result).toEqual(true);
+        const expectedXTile = 101;
+        expect(getXTileByLat(21.029508, 7)).toEqual(expectedXTile);
     });
 
     it('convert lng to y tile grid', () => {
-        const result = true;
-        expect(result).toEqual(true);
+        const expectedYTile = 56;
+        expect(getYTileByLng(105.836620, 7)).toEqual(expectedYTile);
     });
 })

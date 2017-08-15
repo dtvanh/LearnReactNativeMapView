@@ -2,18 +2,42 @@
 import realm from '../db/realm';
 
 const getTileMapLink = (
-    point1,
-    point2,
+    config,
     defaultUrl = 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png') => {
 
+    let boundaries = config.boundaries;
+    let zoomLevel = config.zoomLevel;
+
+    // South, West
+
+    // North, East
+    for (let i = point1.x; i <= point2.x; i++) {
+    	for (let j = point1.y; j < 11; j ++) {
+
+            //console.log(i + '---' + j);
+        }
+    }
+    return links;
 }
 
-const getXTileByLat = (lat, zoomLevel) => {
+/*
+    This function will help to convert from latitude to x tile in grid
+
+    @param {double} lat - Latitude
+    @param {int} zoom - Zoom level of ViewPort
+*/
+const getYTileByLat = (lat, zoom) => {
     return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom)));
 }
 
-const getYTileByLng = (lng, zoomLevel) => {
-    return (Math.floor((lon+180)/360*Math.pow(2,zoom)));
+/*
+    This function will help to convert from longtitude to y tile in grid
+
+    @param {double} lat - Longtitude
+    @param {int} zoom - Zoom level of ViewPort
+*/
+const getXTileByLng = (lng, zoom) => {
+    return (Math.floor((lng+180)/360*Math.pow(2,zoom)));
 }
 
 
@@ -101,4 +125,4 @@ const getYTileByLng = (lng, zoomLevel) => {
 // };
 
 
-export {getXTileByLat, getYTileByLng};
+export {getYTileByLat, getXTileByLng};
