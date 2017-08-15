@@ -7,11 +7,12 @@ MapTile.schema = {
     name: 'MapTile',
     properties: {
         zoomLevel: {type: 'int', default: 0},
-        row: {type: 'int', default: 0},
-        column: {type: 'int', default: 0},
-        url: {type: 'string', default: ''},
-        localPath: {type: 'string', default: ''},
-        creationDate: 'date'
+        rowIndex: {type: 'int', default: 0},
+        columnIndex: {type: 'int', default: 0},
+        link: {type: 'string', default: ''},
+        base64String: {type: 'string', default: ''},
+        creationDate: {type: 'date', default: null},
+        updatedDate: {type: 'date', default: null}
     },
 };
 
