@@ -25,4 +25,5 @@ describe('Util', () => {
 
         expect(expectedLinks).toEqual([]);
     })
+
 })

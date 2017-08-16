@@ -4,6 +4,7 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import TestFunction from './src/TestFunction';
 import realm from './src/db/realm';
 import { downloadImage, downloadListImages, getTileMapLinks } from './src/util/Util';
+import TestUIScreen from './src/TestUIScreen';
 
 const mapViewContent = require('./src/web/mapview.html');
 
@@ -34,4 +35,4 @@ export default class WevViewApp extends Component {
     }
 }
 
-AppRegistry.registerComponent( 'InteractMapView', () => WevViewApp );
+AppRegistry.registerComponent( 'InteractMapView', () => TestUIScreen );

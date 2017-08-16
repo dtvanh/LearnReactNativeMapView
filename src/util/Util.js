@@ -1,5 +1,8 @@
-//import RNFetchBlob from 'react-native-fetch-blob';
 import realm from '../db/realm';
+
+const downloadImages = (url) => {
+    
+}
 
 const getTileMapLinks = (
     config,
