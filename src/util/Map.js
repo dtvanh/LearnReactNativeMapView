@@ -1,4 +1,7 @@
 
-const downloadImage = (url) => {
+const downloadTile = (url) => {
+
 
 }
+
+export { downloadImage }
