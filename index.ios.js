@@ -36,4 +36,4 @@ export default class WevViewApp extends Component {
     }
 }
 
-AppRegistry.registerComponent( 'InteractMapView', () => DownloadOfflineDataScreen );
+AppRegistry.registerComponent( 'InteractMapView', () => LoadMapOfflineScreen );

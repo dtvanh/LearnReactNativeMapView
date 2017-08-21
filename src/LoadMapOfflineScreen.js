@@ -67,6 +67,12 @@ class LoadMapOfflineScreen extends Component {
         realm.delete(mapTile);
       });
     }
+
+    //*********************** HELPER ***********************
+    _passData() {
+
+        
+    }
 }
 
 const styles = StyleSheet.create({
