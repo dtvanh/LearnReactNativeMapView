@@ -93,7 +93,7 @@ class DownloadOfflineDataScreen extends Component {
         let tileMapInfos = this._getAllTileMapLink(
             pointNW,
             pointSE,
-            [3,7]
+            [3,10]
         );
 
         this._downloadMulImages(tileMapInfos);
