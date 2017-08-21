@@ -16,7 +16,8 @@ class LoadMapOfflineScreen extends Component {
     constructor() {
         super();
 
-        this._renderGroupButtons.bind(this);
+        //this._renderGroupButtons.bind(this);
+        this.webView = null;
     }
 
     render() {
@@ -26,7 +27,10 @@ class LoadMapOfflineScreen extends Component {
             { this._renderGroupButtons() }
             <WebView
                 source={sourceWeb}
+                ref={( webView ) => this.webView = webView}
+                onMessage={this._onMessage}
             />
+
             </View>
         )
     }
@@ -36,11 +40,11 @@ class LoadMapOfflineScreen extends Component {
         return (
             <View style={styles.btnGroupContainer}>
 
-                <TouchableOpacity onPress={this._refreshWebView}>
+                <TouchableOpacity onPress={this._refreshWebView.bind(this)}>
                     <Text>REFRESH</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={this._loadOfflineData}>
+                <TouchableOpacity onPress={this._loadOfflineFromRealm.bind(this)}>
                     <Text>LOAD OFFLINE DATA</Text>
                 </TouchableOpacity>
 
@@ -52,13 +56,22 @@ class LoadMapOfflineScreen extends Component {
         )
     }
 
+    //*********************** WEB EVENT LISTENER ***********************
+    _onMessage(event) {
+
+        Alert.alert(event.nativeEvent.data);
+        //console.log( "On Message", event.nativeEvent.data );
+    }
+
     //*********************** ACTIONS ***********************
     _refreshWebView() {
-        Alert.alert('Refresh WebView');
+
+        this._loadOfflineFromRealm();
+        //this._passRefreshRequest();
     }
 
     _loadOfflineData() {
-        Alert.alert('Load Offline Data');
+
     }
 
     _clearOfflineData() {
@@ -69,10 +82,54 @@ class LoadMapOfflineScreen extends Component {
     }
 
     //*********************** HELPER ***********************
-    _passData() {
+    _passOfflineData(data) {
 
-        
+        let message = JSON.stringify({
+            type: 'RENDER',
+            data: 'Yeah yeah'
+        })
+
+        this.webView.postMessage(message);
     }
+
+   _passRefreshRequest() {
+
+       let message = JSON.stringify({
+           type: 'REFRESH'
+       });
+
+       this.webView.postMessage(message);
+    }
+
+    _passOfflineData(base64Str) {
+
+        let message = JSON.stringify({
+            type: 'CACHE_DATA',
+            data: base64Str
+        })
+
+        this.webView.postMessage(message);
+    }
+
+    _loadOfflineFromRealm() {
+        let filterStr = `zoomLevel = ${12}`;
+
+        let mapTiles = realm.objects('MapTile');
+        debugger;
+
+        for (let i = 0; i < mapTiles.length; i ++) {
+
+            let message = JSON.stringify({
+                type: 'CACHE_DATA',
+                data: {
+                    key: mapTiles[i].link,
+                    value: mapTiles[i].base64String
+                }
+            })
+            this.webView.postMessage(message)
+        }
+    }
+
 }
 
 const styles = StyleSheet.create({

@@ -1,3 +1,7 @@
+const REFRESH = 'REFRESH';
+const RENDER = 'RENDER';
+const CACHE_DATA = 'CACHE_DATA';
+const CLEAR_LOCAL_STORAGE = 'CLEAR_LOCAL_STORAGE';
 
 var osmSource = new ol.source.OSM();
 var _layers = [];
@@ -17,41 +21,13 @@ var links = [];
 
 /********* Config Source Map *********/
 osmSource.setTileLoadFunction(function(image, link) {
-    image.Y().src = link;
 
-    links.push(link);
-    //window.postMessage(JSON.stringify(link));
-    console.log(link);
-//    if (isOffline) {
-//
-//        if (localStorage.getItem(link)) {
-//
-//            image.Y().src = localStorage.getItem(link);
-//        } else {
-//
-//            let pattern = /([0-9]+)\/([0-9]+)\/([0-9]+)/g;
-//            let match = pattern.exec(link);
-//
-//            let info = {};
-//
-//            if (match != null) {
-//              info.zoomLevel = parseInt(match[1]);
-//              info.columnIndex = parseInt(match[2]);
-//              info.rowIndex = parseInt(match[3]);
-//              info.link = link;
-//            }
-//
-//            // Trigger Native Download
-//            let message = {
-//                type: 'GET_TILE_MAP_IMAGE',
-//                tileMapInfo: info
-//            }
-//
-//            //window.postMessage(JSON.stringify(message));
-//        }
-//    } else {
-//
-//    }
+    let linkFormated = link.replace(/(https:\/\/([a-c]))./gi, "https://");
+
+    if (localStorage.getItem(linkFormated)) {
+
+        image.Y().src = localStorage.getItem(linkFormated);
+    }
 });
 
 
@@ -67,14 +43,14 @@ var map = new ol.Map({
     layers: _layers,
     target: 'map',
     controls: ol.control.defaults({
-      attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+      attributionOptions:({
         collapsible: false
       })
     }),
     view: new ol.View({
       center: ol.proj.transform(
-          [-0.1275, 51.507222], 'EPSG:4326', 'EPSG:3857'),
-      zoom: 10
+          [153.026330,-27.469695], 'EPSG:4326', 'EPSG:3857'),
+      zoom: 12
     })
 });
 
@@ -89,31 +65,53 @@ if (typeof(Storage) !== "undefined") {
 //*********** REGISTER EVENTS ***********
 let dataPassed = document.getElementById("data-passed");
 
-
 document.addEventListener("message", function(event) {
-    console.log("Received post message", event);
 
-    window.postMessage(JSON.stringify(links));
+    let message = JSON.parse(event.data);
 
-    // let dataParse = JSON.parse(event.data);
-    //
-    // if (dataParse.type === 'RENDER') {
-    //
-    //     localStorage.setItem(dataParse.link, dataParse.base64Str)
-    //
-    // } else {
-    //     alert('Do anotherthing');
-    // }
-    //
-    // localStorage.setItem('imageBase64', event.data);
-    // map.refresh();
-    // zoom();
+    if (message.type === RENDER) {
+
+        dataPassed.innerHTML = message.data;
+    } else if (message.type === REFRESH) {
+        // dataPassed.innerHTML = 'asdfjklajsdfjkakjsdfalsdkfj';
+        // window.postMessage('yeahyeah cai nay tu webview nek !')
+
+        map.refresh();
+    } else if (message.type === CACHE_DATA) {
+
+        saveTileMapToLocalStorage(message.data.key, message.data.value);
+    } else if (message.type === CLEAR_LOCAL_STORAGE) {
+
+        clearLocalStorage();
+    }
 }, false);
 
-function zoom() {
-    map.getView().setZoom(12);
+/****************** HELPER ******************/
+function saveTileMapToLocalStorage(key, value) {
+
+    try {
+      localStorage.setItem(key, value);
+    } catch(e) {
+      if (isQuotaExceeded(e)) {
+          alert('LocalStorage is FULL');
+      }
+    }
 }
 
-function moveToLatLng() {
+function getTileMap(key) {
+    return localStorage.getItem(key);
+}
 
+function clearLocalStorage() {
+    localStorage.clear();
+}
+
+function clearItemWithKey(key) {
+    localStorage.removeItem(key);
+}
+
+function formatLink(link) {
+    let result = '';
+
+    return result;
 }

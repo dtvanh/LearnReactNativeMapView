@@ -79,21 +79,26 @@ class DownloadOfflineDataScreen extends Component {
 
         this.setState({ progress: 0.0});
 
+        /*
+        NW -27.417269, 152.950765
+		SE  -27.515184, 153.093624
+        */
+
         let pointNW = {
-            lat: 39.412512,
-            lng: -95.020681
+            lat: -27.417269,
+            lng: 152.950765
 
         };
 
         let pointSE = {
-            lat: 38.812002,
-            lng: -94.235999
+            lat: -27.515184,
+            lng: 153.093624
         };
 
         let tileMapInfos = this._getAllTileMapLink(
             pointNW,
             pointSE,
-            [3,10]
+            [3,12]
         );
 
         this._downloadMulImages(tileMapInfos);
