@@ -5,6 +5,7 @@ import TestFunction from './src/TestFunction';
 import realm from './src/db/realm';
 import { downloadImage, downloadListImages, getTileMapLinks } from './src/util/Util';
 import TestUIScreen from './src/TestUIScreen';
+import DrawModule from './src/DrawModule';
 
 const mapViewContent = require('./src/web/mapview.html');
 
@@ -35,4 +36,4 @@ export default class WevViewApp extends Component {
     }
 }
 
-AppRegistry.registerComponent( 'InteractMapView', () => TestUIScreen );
+AppRegistry.registerComponent( 'InteractMapView', () => DrawModule );
