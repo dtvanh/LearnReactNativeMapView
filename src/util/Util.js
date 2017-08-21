@@ -1,41 +1,45 @@
 import realm from '../db/realm';
 
-const downloadImages = (url) => {
-    
-}
+/*
+    Get all available tile map links with user input
+*/
 
 const getTileMapLinks = (
     config,
-    defaultPatternUrl = 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png') => {
+    defaultPatternUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png') => {
 
     let boundaries = config.boundaries;
-    let zoomLevel = config.zoomLevel;
-
-    // North, West
-    let xNW = getXTileByLng(boundaries[1], zoomLevel);
-    let yNW = getYTileByLat(boundaries[0], zoomLevel);
-
-    // South, East
-    let xSE = getXTileByLng(boundaries[3], zoomLevel);
-    let ySE = getYTileByLat(boundaries[2], zoomLevel);
+    let zoomMin = config.zoomRange[0];
+    let zoomMax = config.zoomRange[1];
 
     let links = [];
 
-    for (let i = xNW; i <= xSE; i++) {
-        for (let j = yNW; j <= ySE; j++) {
+    for (let z = zoomMin; z <= zoomMax; z++) {
 
-            let replaces = {
-                '{x}' : i,
-                '{y}' : j,
-                '{z}' : zoomLevel
-            };
+        // North, West
+        let xNW = getXTileByLng(boundaries[1], z);
+        let yNW = getYTileByLat(boundaries[0], z);
 
-            let link = defaultPatternUrl.replace(/{\w+}/g, function(matches) {
+        // South, East
+        let xSE = getXTileByLng(boundaries[3], z);
+        let ySE = getYTileByLat(boundaries[2], z);
 
-                return replaces[matches] || matches;
-            })
+        for (let i = xNW; i <= xSE; i++) {
+            for (let j = yNW; j <= ySE; j++) {
 
-            links.push(link);
+                let replaces = {
+                    '{x}' : i,
+                    '{y}' : j,
+                    '{z}' : z
+                };
+
+                let link = defaultPatternUrl.replace(/{\w+}/g, function(matches) {
+
+                    return replaces[matches] || matches;
+                })
+
+                links.push(link);
+            }
         }
     }
 
@@ -50,7 +54,7 @@ const getTileMapLinks = (
 */
 const getYTileByLat = (lat, zoom) => {
 
-    { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); }
+    return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom)));
 }
 
 /*

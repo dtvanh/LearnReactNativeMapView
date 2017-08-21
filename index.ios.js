@@ -6,6 +6,8 @@ import realm from './src/db/realm';
 import { downloadImage, downloadListImages, getTileMapLinks } from './src/util/Util';
 import TestUIScreen from './src/TestUIScreen';
 import DrawModule from './src/DrawModule';
+import DownloadOfflineDataScreen from './src/DownloadOfflineDataScreen';
+import LoadMapOfflineScreen from './src/LoadMapOfflineScreen';
 
 const mapViewContent = require('./src/web/mapview.html');
 
