@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
+import realm from './db/realm';
 
 const sourceWeb = require('./web/mapview_offline_mode.html');
 
@@ -19,21 +20,6 @@ class LoadMapOfflineScreen extends Component {
     }
 
     render() {
-
-        // return (
-        //     <View style={styles.container}>
-        //
-        //         { this._renderGroupButtons() }
-        //
-        //         <View style={styles.webviewContainer}>
-        //             <WebView
-        //                 source={sourceWeb}
-        //                 style={{marginTop: 20, flex: 1.0}}
-        //             />
-        //         </View>
-        //     </View>
-        //
-        // )
 
         return (
             <View style={styles.container}>
@@ -57,6 +43,11 @@ class LoadMapOfflineScreen extends Component {
                 <TouchableOpacity onPress={this._loadOfflineData}>
                     <Text>LOAD OFFLINE DATA</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={this._clearOfflineData}>
+                    <Text>CLEAR OFFLINE DATA</Text>
+                </TouchableOpacity>
+
             </View>
         )
     }
@@ -68,6 +59,13 @@ class LoadMapOfflineScreen extends Component {
 
     _loadOfflineData() {
         Alert.alert('Load Offline Data');
+    }
+
+    _clearOfflineData() {
+        realm.write(() => {
+        let mapTile = realm.objects('MapTile');
+        realm.delete(mapTile);
+      });
     }
 }
 

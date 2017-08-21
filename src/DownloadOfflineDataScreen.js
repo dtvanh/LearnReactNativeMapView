@@ -46,6 +46,13 @@ class DownloadOfflineDataScreen extends Component {
                     }}>
                         <Text>Start Download</Text>
                     </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {
+                        //this._downloadImage(imgLink)
+                        this._clearRealmData();
+                    }}>
+                        <Text>Clear Data</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <ProgressBar
@@ -144,6 +151,15 @@ class DownloadOfflineDataScreen extends Component {
 
             this._downloadImage(names[i]);
         }
+    }
+
+    // ACTIONS
+
+    _clearRealmData() {
+        realm.write(() => {
+            let mapTile = realm.objects('MapTile');
+            realm.delete(mapTile);
+        });
     }
 }
 
