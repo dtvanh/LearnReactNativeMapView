@@ -21,6 +21,8 @@ class DownloadOfflineDataScreen extends Component {
             completed: 0,
             failed: 0
         }
+
+        this._getAllTileMapLink.bind(this);
     }
 
     render() {
@@ -34,70 +36,91 @@ class DownloadOfflineDataScreen extends Component {
             }}>
                 <View>
                     <TouchableOpacity onPress={() => {
-                        //this._downloadImage(imgLink)
-                        this._getAllTileMapLink();
+
                     }}>
                         <Text>Get Tile Map Link</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {
-                        //this._downloadImage(imgLink)
-                        this._downloadMulImages();
-                    }}>
+                    <TouchableOpacity onPress={() => this._tapOnStartDownload()}>
                         <Text>Start Download</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => {
-                        //this._downloadImage(imgLink)
-                        this._clearRealmData();
+                        this._tapOnClearData();
                     }}>
                         <Text>Clear Data</Text>
                     </TouchableOpacity>
                 </View>
 
-                <ProgressBar
-                    fillStyle={{}}
-                    backgroundStyle={{backgroundColor: '#cccccc', borderRadius: 2}}
-                    style={{marginTop: 10, width: 300}}
-                    progress={this.state.progress}
-                />
+                <View>
+                    <Text>{this.state.completed}</Text>
+                    <ProgressBar
+                        fillStyle={{}}
+                        backgroundStyle={{backgroundColor: '#cccccc', borderRadius: 2}}
+                        style={{marginTop: 10, width: 300}}
+                        progress={this.state.progress}
+                    />
+                </View>
             </View>
-
         )
     }
 
-    _getAllTileMapLink() {
-
-        // 39.412512, -95.020681
-        // 38.812002, -94.235999
-        let pointA = {
-            lat: 39.412512,
-            lng: -95.020681
-        }
-
-        let pointB = {
-            lat: 38.812002,
-            lng: -94.235999
-        }
-
-        let links = getTileMapLinks({
-            boundaries: [pointA.lat, pointB.lng, pointB.lat, pointB.lng],
-            zoomRange: [7, 10]
-        });
-
-        console.log(links);
+    // ***************** ACTIONS *****************
+    _tapOnClearData() {
+        this._clearRealmData();
     }
 
-    _downloadImage(url) {
+    _tapOnStartDownload() {
+
+        if (this.state.total !== this.state.completed + this.state.failed) {
+            Alert.alert('Not complete yet !!')
+            return;
+        }
 
         this.setState({ progress: 0.0});
+
+        let pointNW = {
+            lat: 39.412512,
+            lng: -95.020681
+
+        };
+
+        let pointSE = {
+            lat: 38.812002,
+            lng: -94.235999
+        };
+
+        let tileMapInfos = this._getAllTileMapLink(
+            pointNW,
+            pointSE,
+            [3,7]
+        );
+
+        this._downloadMulImages(tileMapInfos);
+    }
+
+    // ***************** UI HELPER *****************
+
+
+    // ***************** HELPER *****************
+    _getAllTileMapLink(pointNW, pointSE, zoomRange) {
+
+        let links = getTileMapLinks({
+            boundaries: [pointNW.lat, pointNW.lng, pointSE.lat, pointSE.lng],
+            zoomRange: zoomRange
+        });
+
+        return links;
+    }
+
+    _downloadImage(info) {
 
         let cacheFilePath = '';
 
         RNFetchBlob.config({
             fileCache: true
         })
-        .fetch('GET', url)
+        .fetch('GET', info.link)
         .then((response) => {
 
             cacheFilePath = response.getFile
@@ -109,6 +132,7 @@ class DownloadOfflineDataScreen extends Component {
 
             realm.write(() => {
                 realm.create('MapTile', {
+                    ...info,
                     base64String: imageData,
                     creationDate: new Date(),
                     updatedDate: new Date()});
@@ -120,7 +144,7 @@ class DownloadOfflineDataScreen extends Component {
 
                 return {
                     completed: __completed,
-                    progress: __completed / prevState.total
+                    progress: __completed / prevState.total,
                 }
             })
 
@@ -129,16 +153,15 @@ class DownloadOfflineDataScreen extends Component {
         .catch((err) => {
 
             console.log(err.message);
+            this.setState({
+                failed: this.state.failed + 1
+            })
         })
     }
 
-    _downloadMulImages() {
+    _downloadMulImages(links: Array) {
 
-        let names = [
-            'https://tile.openstreetmap.org/8/148/96.png',
-        ];
-
-        const length = names.length;
+        const length = links.length;
 
         this.setState({
             total: length,
@@ -149,18 +172,24 @@ class DownloadOfflineDataScreen extends Component {
 
         for (let i = 0; i < length; i++) {
 
-            this._downloadImage(names[i]);
+            this._downloadImage(links[i]);
         }
     }
-
-    // ACTIONS
 
     _clearRealmData() {
         realm.write(() => {
             let mapTile = realm.objects('MapTile');
             realm.delete(mapTile);
         });
+
+        this.setState({
+            progress: 0.0,
+            total: 0,
+            completed: 0,
+            failed: 0
+        });
     }
+
 }
 
 export default DownloadOfflineDataScreen;
