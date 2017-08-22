@@ -14,11 +14,20 @@ arrayRing = [
         ]
     ];
 drawPolygon();
-function drawPolygon(){
+//get data from RN
+document.addEventListener("message", function(event) {
+    let message = JSON.parse(event.data);
+    alert("get DATA from LOCAL!");
+    if (message.type === CACHE_DATA) {
+        //drawPolygon(message.data);
+    } 
+}, false);
+function drawPolygon(dataOffline){
 	//Holds the Polygon feature
-	let data = JSON.parse(localStorage.getItem("fData"));
+    let data = JSON.parse(localStorage.getItem("fData"));
+    //let data = JSON.parse(dataOffline);
 	if(!data){
-		localStorage.setItem("fData", JSON.stringify(arrayRing));
+		//localStorage.setItem("fData", JSON.stringify(arrayRing));
 		data = arrayRing;
 	}
 	polyFeature = new ol.Feature({
@@ -87,7 +96,8 @@ draw.on('drawend', function(evt) {
 	localStorage.setItem("type", type);
 	localStorage.setItem("fData", JSON.stringify(data));
 	feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
-  // Retrieve
+    window.postMessage(JSON.stringify(data));
+    // Retrieve
   //localStorage.getItem("type");
   //save data to Realm
   

@@ -34,4 +34,4 @@ Polygons.schema = {
     },
 };
 
-export default new Realm({schema: [ MapTile, Points ]});
+export default new Realm({schema: [ MapTile, Points, Polygons]});
