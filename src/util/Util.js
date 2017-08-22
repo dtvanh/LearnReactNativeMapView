@@ -33,12 +33,19 @@ const getTileMapLinks = (
                     '{z}' : z
                 };
 
-                let link = defaultPatternUrl.replace(/{\w+}/g, function(matches) {
+                let __link = defaultPatternUrl.replace(/{\w+}/g, function(matches) {
 
                     return replaces[matches] || matches;
                 })
 
-                links.push(link);
+                let info = {
+                    zoomLevel: z,
+                    columnIndex: j,
+                    rowIndex: i,
+                    link: __link
+                }
+
+                links.push(info);
             }
         }
     }

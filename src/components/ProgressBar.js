@@ -25,7 +25,7 @@ var ProgressBar = React.createClass({
     return {
       style: styles,
       easing: Easing.inOut(Easing.ease),
-      easingDuration: 500
+      easingDuration: 0
     };
   },
 

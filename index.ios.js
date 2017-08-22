@@ -38,3 +38,4 @@ export default class WevViewApp extends Component {
 }
 
 AppRegistry.registerComponent( 'InteractMapView', () => DrawModule );
+
