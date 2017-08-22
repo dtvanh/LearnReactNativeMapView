@@ -5,6 +5,7 @@ import {
     Text,
     Alert,
     StyleSheet,
+    TextInput
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
 import ProgressBar from '../components/ProgressBar';
@@ -15,6 +16,8 @@ const initState = {
     progress: 0.0,
     total: 0,
     completed: 0,
+    boundaries: '-27.417269,152.950765,-27.515184,153.093624',
+    zoomRange: '3-15',
     failed: 0
 }
 
@@ -30,41 +33,6 @@ class DownloadOfflineDataScreen extends Component {
         this._getAllTileMapLink.bind(this);
     }
 
-    render() {
-        return (
-
-            <View style= {styles.container}>
-                <View>
-                    <TouchableOpacity onPress={() => {
-                        let path = realm.path;
-                    }}>
-                        <Text>Get Tile Map Link</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => this._tapOnStartDownload()}>
-                        <Text>Start Download</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => {
-                        this._tapOnClearData();
-                    }}>
-                        <Text>Clear Data</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <Text>{this.state.completed} / {this.state.total}</Text>
-                    <ProgressBar
-                        fillStyle={{}}
-                        backgroundStyle={{backgroundColor: '#cccccc', borderRadius: 2}}
-                        style={{marginTop: 10, width: 300}}
-                        progress={this.state.progress}
-                    />
-                </View>
-            </View>
-        )
-    }
-
     // ***************** ACTIONS *****************
     _tapOnClearData() {
         this._clearRealmData();
@@ -77,22 +45,27 @@ class DownloadOfflineDataScreen extends Component {
         }
 
         this.setState({ progress: 0.0});
+
+        let bounds = this.state.boundaries.split(',');
+        let zoomRange = this.state.zoomRange.split('-');
+
         
         let pointNW = {
-            lat: -27.417269,
-            lng: 152.950765
-
+            lat: parseFloat(bounds[0]),
+            lng: parseFloat(bounds[1])
         };
 
         let pointSE = {
-            lat: -27.515184,
-            lng: 153.093624
+            lat: parseFloat(bounds[2]),
+            lng: parseFloat(bounds[3])
         };
+
+        
 
         let tileMapInfos = this._getAllTileMapLink(
             pointNW,
             pointSE,
-            [3,15]
+            [parseInt(zoomRange[0]),parseInt(zoomRange[1])]
         );
 
         this._downloadMulImages(tileMapInfos);
@@ -190,6 +163,85 @@ class DownloadOfflineDataScreen extends Component {
         });
     }
 
+    render() {
+        
+            const { container, btnGroup, progressBar, boundInfo } = styles;
+            
+            return (
+    
+                <View style= { container }>
+                    <View style= {boundInfo}>
+                        
+                        <View style={{
+                            
+                        }}>
+                            <Text>Boundaries (NW, SE)</Text>    
+                            <TextInput
+                                style={{height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 10}}
+                                onChangeText={(text) => this.setState({boundaries: text})}
+                                value={this.state.boundaries}
+                            />
+                        </View>
+                        
+                        <View style={{
+                            marginTop: 10
+                        }}>
+                            <Text>Zoom Range:(3-15)</Text>    
+                            <TextInput
+                                style={{height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 10}}
+                                onChangeText={(text) => this.setState({zoomRange: text})}                                
+                                value={this.state.zoomRange}
+                            />
+                        </View>
+
+                        <View style={{
+                            marginTop: 10
+                        }}>
+                            <Text>Realm Path (For Debug):</Text>    
+                            <TextInput
+                                style={{height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 10}}
+                                editable = {false}
+                                value={this.state.path}
+                                multiline = {true}
+                                numberOfLines = {45}
+                            />
+                        </View>
+
+                    </View>
+
+                    <View style={ btnGroup }>
+                        <TouchableOpacity onPress={() => {
+                            this.setState({path: realm.path})
+                        }}>
+                            <Text>Get Local Realm Path</Text>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity onPress={() => this._tapOnStartDownload()}>
+                            <Text>Start Download</Text>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity onPress={() => {
+                            this._tapOnClearData();
+                        }}>
+                            <Text>Clear All Data</Text>
+                        </TouchableOpacity>
+                    </View>
+    
+                    <View style={ progressBar }>
+                        <Text style={{
+                            fontSize: 12,
+                            color: 'gray'
+                        }}>{this.state.completed} / {this.state.total}</Text>
+                        <ProgressBar
+                            fillStyle={{}}
+                            backgroundStyle={{backgroundColor: '#cccccc', borderRadius: 2}}
+                            style={{marginTop: 10, width: 300}}
+                            progress={this.state.progress}
+                        />
+                    </View>
+                </View>
+            )
+        }
 }
 
 const styles = StyleSheet.create({
@@ -199,7 +251,25 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    btnGroup: {
+        flex: 0.2,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: 'green'
+    },
+
+    progressBar: {
+        flex: 0.1
+    },
+    
+    boundInfo: {
+        flex: 0.8,
+        flexDirection: 'column',
+        width: 300
+    },
 })
 
 export default DownloadOfflineDataScreen;
