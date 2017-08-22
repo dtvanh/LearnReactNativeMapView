@@ -7,9 +7,9 @@ import {
     StyleSheet,
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
-import ProgressBar from './components/ProgressBar';
-import realm from './db/realm';
-import {getTileMapLinks} from './util/Util';
+import ProgressBar from '../components/ProgressBar';
+import realm from '../db/realm';
+import { getTileMapLinks } from '../util/Util';
 
 const initState = {
     progress: 0.0,
@@ -176,6 +176,7 @@ class DownloadOfflineDataScreen extends Component {
     }
 
     _clearRealmData() {
+
         realm.write(() => {
             let mapTile = realm.objects('MapTile');
             realm.delete(mapTile);

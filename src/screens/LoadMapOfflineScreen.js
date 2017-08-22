@@ -7,10 +7,10 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import realm from './db/realm';
+import realm from '../db/realm';
 
-const sourceWebOffline = require('./web/mapview_offline_mode.html');
-const sourceTest = require('./web/test.html');
+const sourceWebOffline = require('../web/mapview_offline_mode.html');
+const sourceTest = require('../web/test.html');
 
 class LoadMapOfflineScreen extends Component {
 

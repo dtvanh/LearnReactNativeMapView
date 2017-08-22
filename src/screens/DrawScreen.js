@@ -4,7 +4,7 @@ import {
     Text
 } from 'react-native';
 
-class SecondScreen extends Component {
+class DrawScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -19,10 +19,10 @@ class SecondScreen extends Component {
                 justifyContent: 'center',
                 backgroundColor: 'red'
             }}>
-                <Text> Second Screen </Text>
+                <Text> DrawScreen </Text>
             </View>
         )
     }
 }
 
-export default SecondScreen;
+export default DrawScreen;
