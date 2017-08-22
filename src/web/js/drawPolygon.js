@@ -1,4 +1,4 @@
-var polyFeature,vectorLayer,map,arrayRing;
+var draw, polyFeature,vectorLayer,map,arrayRing, esrijsonFormat = new ol.format.EsriJSON();
 arrayRing = [
         [
             [10.689697265625, -25.0927734375],
@@ -13,12 +13,17 @@ arrayRing = [
             [28.048095703125, -26.015625]
         ]
     ];
-drawPolygon(arrayRing);
-function drawPolygon(array){
-	//Holds the Polygon feature  
+drawPolygon();
+function drawPolygon(){
+	//Holds the Polygon feature
+	let data = JSON.parse(localStorage.getItem("fData"));
+	if(!data){
+		localStorage.setItem("fData", JSON.stringify(arrayRing));
+		data = arrayRing;
+	}
 	polyFeature = new ol.Feature({
-		geometry: new ol.geom.Polygon(array)
-	});
+			geometry: new ol.geom.Polygon(data)
+		});	
 	polyFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
 }
 var vectorSource = new ol.source.Vector({});
@@ -27,60 +32,7 @@ vectorSource.addFeature(polyFeature);
 vectorLayer = new ol.layer.Vector({
     source: vectorSource
 		});
-
-var draw = new ol.interaction.Draw({
-  source: vectorSource,
-  type: /** @type {ol.geom.GeometryType} */ ('Polygon')
-});
-var select = new ol.interaction.Select();
-select.setActive(false);
-var selected = select.getFeatures();
-
-var modify = new ol.interaction.Modify({
-  features: selected
-});
-modify.setActive(false);
-
-var typeSelect = document.getElementById('type');
-
-typeSelect.onchange = function(e) {
-  draw.setActive(typeSelect.value === 'DRAW');
-  select.setActive(typeSelect.value === 'MODIFY');
-  modify.setActive(typeSelect.value === 'MODIFY');
-};
-
-var dirty = {};
-
-selected.on('add', function(evt) {
-  var feature = evt.element;
-  feature.on('change', function(evt) {
-    dirty[evt.target.getId()] = true;
-  });
-});
-
-selected.on('remove', function(evt) {
-  var feature = evt.element;
-  var fid = feature.getId();
-  if (dirty[fid] === true) {
-    var payload = '[' + esrijsonFormat.writeFeature(feature, {
-      featureProjection: map.getView().getProjection()
-    }) + ']';
-    var url = serviceUrl + layer + '/updateFeatures';
-    $.post(url, { f: 'json', features: payload }).done(function(data) {
-      var result = JSON.parse(data);
-      if (result.updateResults && result.updateResults.length > 0) {
-        if (result.updateResults[0].success !== true) {
-          var error = result.updateResults[0].error;
-          alert(error.description + ' (' + error.code + ')');
-        } else {
-          delete dirty[fid];
-        }
-      }
-    });
-  }
-});
 map = new ol.Map({
-	interactions: ol.interaction.defaults().extend([draw]),
     target: document.getElementById('olMap'),
     layers: [
     new ol.layer.Tile({
@@ -96,4 +48,47 @@ map = new ol.Map({
         center: [2952104.019976033, -3277504.823700756],
         zoom: 4
     })
+});
+var typeShape = document.getElementById('typeShape');
+function addInteraction() {
+	var value = typeShape.value;
+	if (value !== 'None') {
+	  draw = new ol.interaction.Draw({
+		source: vectorSource,
+		type: /** @type {ol.geom.GeometryType} */ (typeShape.value)
+	  });
+	  map.addInteraction(draw);
+	}
+}
+typeShape.onchange = function() {
+	map.removeInteraction(draw);
+	addInteraction();
+};
+addInteraction();
+
+draw.on('drawstart', function(evt){
+    console.log("Drawstart test");
+    var geometry = evt.feature.getGeometry();
+    console.log("Geometry: " + geometry.getType());
+})
+
+draw.on('drawend', function(evt) {
+  var feature = evt.feature;
+  feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
+  var payload = '[' + esrijsonFormat.writeFeature(feature, {
+    featureProjection: map.getView().getProjection()
+  }) + ']';
+  var type = feature.getGeometry().getType();
+  var obj = JSON.parse(payload);
+  var rings = obj[0].geometry.rings[0];
+  var data = JSON.parse(localStorage.getItem("fData"));
+  data.push(rings);
+  // Store
+	localStorage.setItem("type", type);
+	localStorage.setItem("fData", JSON.stringify(data));
+	feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+  // Retrieve
+  //localStorage.getItem("type");
+  //save data to Realm
+  
 });

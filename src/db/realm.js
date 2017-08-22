@@ -25,4 +25,13 @@ Points.schema = {
     },
 };
 
+class Polygons extends Realm.Object {}
+Polygons.schema = {
+    name: 'Polygons',
+    properties: {
+        user: {type: 'string', default: 'admin'},
+        data: {type: 'string', default: ''},
+    },
+};
+
 export default new Realm({schema: [ MapTile, Points ]});
