@@ -54,6 +54,7 @@ osmSource.setTileLoadFunction(function(image, link) {
 //    }
 });
 
+osmSource.setTileLoadFunction(osmSource.getTileLoadFunction());
 
 
 

@@ -3,12 +3,20 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Alert
+    Alert,
+    StyleSheet,
 } from 'react-native';
 import RNFetchBlob from 'react-native-fetch-blob';
 import ProgressBar from './components/ProgressBar';
 import realm from './db/realm';
 import {getTileMapLinks} from './util/Util';
+
+const initState = {
+    progress: 0.0,
+    total: 0,
+    completed: 0,
+    failed: 0
+}
 
 class DownloadOfflineDataScreen extends Component {
 
@@ -16,10 +24,7 @@ class DownloadOfflineDataScreen extends Component {
         super();
 
         this.state = {
-            progress: 0.0,
-            total: 0,
-            completed: 0,
-            failed: 0
+            ...initState
         }
 
         this._getAllTileMapLink.bind(this);
@@ -28,16 +33,10 @@ class DownloadOfflineDataScreen extends Component {
     render() {
         return (
 
-            <View style= {{
-                flex: 1.0,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <View style= {styles.container}>
                 <View>
                     <TouchableOpacity onPress={() => {
                         let path = realm.path;
-                        debugger;
                     }}>
                         <Text>Get Tile Map Link</Text>
                     </TouchableOpacity>
@@ -78,12 +77,7 @@ class DownloadOfflineDataScreen extends Component {
         }
 
         this.setState({ progress: 0.0});
-
-        /*
-        NW -27.417269, 152.950765
-		SE  -27.515184, 153.093624
-        */
-
+        
         let pointNW = {
             lat: -27.417269,
             lng: 152.950765
@@ -196,5 +190,15 @@ class DownloadOfflineDataScreen extends Component {
     }
 
 }
+
+const styles = StyleSheet.create({
+
+    container: {
+        flex: 1.0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})
 
 export default DownloadOfflineDataScreen;
