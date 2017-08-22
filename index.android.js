@@ -7,6 +7,8 @@ import { downloadImage, downloadListImages, getTileMapLinks } from './src/util/U
 import DrawModule from './src/DrawModule';
 import DownloadOfflineDataScreen from './src/DownloadOfflineDataScreen';
 import LoadMapOfflineScreen from './src/LoadMapOfflineScreen';
+import LoadMapOfflineAndroid from './src/LoadMapOfflineAndroid';
+
 
 const mapViewContent = require('./src/web/mapview.html');
 
@@ -37,5 +39,9 @@ export default class WevViewApp extends Component {
     }
 }
 
+<<<<<<< HEAD
 AppRegistry.registerComponent( 'InteractMapView', () => DrawModule );
 
+=======
+AppRegistry.registerComponent( 'InteractMapView', () => LoadMapOfflineAndroid );
+>>>>>>> master

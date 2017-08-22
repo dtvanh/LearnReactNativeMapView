@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import realm from './db/realm';
 
-const sourceWebOffline = require('./web/mapview_offline_mode.html');
 const sourceTest = require('./web/test.html');
+const sourceMapView = require('./web/mapview.html');
 
-class LoadMapOfflineScreen extends Component {
+class LoadMapOfflineAndroid extends Component {
 
     constructor() {
         super();
@@ -27,7 +27,7 @@ class LoadMapOfflineScreen extends Component {
             <View style={styles.container}>
             { this._renderGroupButtons() }
                 <WebView
-                    source={sourceWebOffline}
+                    source={sourceTest}
                     ref={( webView ) => this.webView = webView}
                     onMessage={this._onMessage}
                     javaScriptEnabled={true}
@@ -85,13 +85,7 @@ class LoadMapOfflineScreen extends Component {
         realm.write(() => {
         let mapTile = realm.objects('MapTile');
         realm.delete(mapTile);
-        });
-
-        let message = JSON.stringify({
-            type: 'CLEAR_LOCAL_STORAGE',
-        })
-
-        this.webView.postMessage(message);
+      });
     }
 
     //*********************** HELPER ***********************
@@ -125,9 +119,10 @@ class LoadMapOfflineScreen extends Component {
     }
 
     _loadOfflineFromRealm() {
-        let filterStr = `zoomLevel = ${15}`;
+        let filterStr = `zoomLevel = ${12}`;
 
-        let mapTiles = realm.objects('MapTile').filtered(filterStr);
+        let mapTiles = realm.objects('MapTile');
+        debugger;
 
         for (let i = 0; i < mapTiles.length; i ++) {
 
@@ -164,4 +159,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoadMapOfflineScreen;
+export default LoadMapOfflineAndroid;

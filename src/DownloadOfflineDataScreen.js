@@ -36,7 +36,8 @@ class DownloadOfflineDataScreen extends Component {
             }}>
                 <View>
                     <TouchableOpacity onPress={() => {
-
+                        let path = realm.path;
+                        debugger;
                     }}>
                         <Text>Get Tile Map Link</Text>
                     </TouchableOpacity>
@@ -53,7 +54,7 @@ class DownloadOfflineDataScreen extends Component {
                 </View>
 
                 <View>
-                    <Text>{this.state.completed}</Text>
+                    <Text>{this.state.completed} / {this.state.total}</Text>
                     <ProgressBar
                         fillStyle={{}}
                         backgroundStyle={{backgroundColor: '#cccccc', borderRadius: 2}}
@@ -73,7 +74,6 @@ class DownloadOfflineDataScreen extends Component {
     _tapOnStartDownload() {
 
         if (this.state.total !== this.state.completed + this.state.failed) {
-            Alert.alert('Not complete yet !!')
             return;
         }
 
@@ -98,7 +98,7 @@ class DownloadOfflineDataScreen extends Component {
         let tileMapInfos = this._getAllTileMapLink(
             pointNW,
             pointSE,
-            [3,12]
+            [3,15]
         );
 
         this._downloadMulImages(tileMapInfos);
