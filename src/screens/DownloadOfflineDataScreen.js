@@ -131,7 +131,7 @@ class DownloadOfflineDataScreen extends Component {
         })
     }
 
-    _downloadMulImages(links: Array) {
+    _downloadMulImages(links) {
 
         const length = links.length;
 
@@ -211,6 +211,7 @@ class DownloadOfflineDataScreen extends Component {
 
                     <View style={ btnGroup }>
                         <TouchableOpacity onPress={() => {
+                            console.log(realm.path);
                             this.setState({path: realm.path})
                         }}>
                             <Text>Get Local Realm Path</Text>

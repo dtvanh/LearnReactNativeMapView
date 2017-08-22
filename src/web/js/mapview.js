@@ -54,8 +54,6 @@ osmSource.setTileLoadFunction(function(image, link) {
 //    }
 });
 
-osmSource.setTileLoadFunction(osmSource.getTileLoadFunction());
-
 
 
 var layer = new ol.layer.Tile({

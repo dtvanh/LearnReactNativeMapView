@@ -3,36 +3,26 @@ const RENDER = 'RENDER';
 const CACHE_DATA = 'CACHE_DATA';
 const CLEAR_LOCAL_STORAGE = 'CLEAR_LOCAL_STORAGE';
 
-var osmSource = new ol.source.OSM();
+var osmSource = new ol.source.OSM({
+    crossOrigin: 'anonymous'
+});
 var _layers = [];
-var isOffline = true;
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function demo() {
-  console.log('Taking a break...');
-  await sleep(2000);
-  console.log('Two second later');
-}
 
 var links = [];
 
 /********* Config Source Map *********/
 osmSource.setTileLoadFunction(function(image, link) {
 
+
     let linkFormated = link.replace(/(https:\/\/([a-c]))./gi, "https://");
 
     if (localStorage.getItem(linkFormated)) {
-
         image.Y().src = localStorage.getItem(linkFormated);
+        image.Y().crossOrigin = null;
+    } else {
+        //image.Y().src = link;
     }
-
-    dataPassed.innerHTML = linkFormated;
 });
-
-
 
 
 var layer = new ol.layer.Tile({
@@ -52,17 +42,10 @@ var map = new ol.Map({
     view: new ol.View({
       center: ol.proj.transform(
           [153.026330,-27.469695], 'EPSG:4326', 'EPSG:3857'),
-      zoom: 15
+      zoom: 14
     })
 });
 
-// *********** ADD POINTS ***********
-
-if (typeof(Storage) !== "undefined") {
-    console.log('LocalStorage');
-} else {
-    console.log('Do not support LocalStorage');
-}
 
 //*********** REGISTER EVENTS ***********
 let dataPassed = document.getElementById("data-passed");
@@ -96,6 +79,7 @@ function saveTileMapToLocalStorage(key, value) {
     } catch(e) {
       if (isQuotaExceeded(e)) {
           alert('LocalStorage is FULL');
+          //clearLocalStorage();
       }
     }
 }
