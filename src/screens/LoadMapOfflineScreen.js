@@ -7,10 +7,10 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import realm from './db/realm';
+import realm from '../db/realm';
 
-const sourceWebOffline = require('./web/mapview_offline_mode.html');
-const sourceTest = require('./web/test.html');
+const sourceWebOffline = require('../web/mapview_offline_mode.html');
+const sourceTest = require('../web/test.html');
 
 class LoadMapOfflineScreen extends Component {
 
@@ -30,8 +30,6 @@ class LoadMapOfflineScreen extends Component {
                     source={sourceWebOffline}
                     ref={( webView ) => this.webView = webView}
                     onMessage={this._onMessage}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
                 />
 
             </View>
@@ -55,7 +53,7 @@ class LoadMapOfflineScreen extends Component {
                     <Text>LOAD OFFLINE DATA</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={this._clearOfflineData}>
+                <TouchableOpacity onPress={this._clearOfflineData.bind(this)}>
                     <Text>CLEAR OFFLINE DATA</Text>
                 </TouchableOpacity>
 
@@ -82,10 +80,6 @@ class LoadMapOfflineScreen extends Component {
     }
 
     _clearOfflineData() {
-        realm.write(() => {
-        let mapTile = realm.objects('MapTile');
-        realm.delete(mapTile);
-        });
 
         let message = JSON.stringify({
             type: 'CLEAR_LOCAL_STORAGE',
@@ -95,16 +89,6 @@ class LoadMapOfflineScreen extends Component {
     }
 
     //*********************** HELPER ***********************
-    _passOfflineData(data) {
-
-        let message = JSON.stringify({
-            type: 'RENDER',
-            data: 'Yeah yeah'
-        })
-
-        this.webView.postMessage(message);
-    }
-
    _passRefreshRequest() {
 
        let message = JSON.stringify({
@@ -112,20 +96,11 @@ class LoadMapOfflineScreen extends Component {
        });
 
        this.webView.postMessage(message);
-    }
 
-    _passOfflineData(base64Str) {
-
-        let message = JSON.stringify({
-            type: 'CACHE_DATA',
-            data: base64Str
-        })
-
-        this.webView.postMessage(message);
     }
 
     _loadOfflineFromRealm() {
-        let filterStr = `zoomLevel = ${15}`;
+        let filterStr = `zoomLevel = ${14}`;
 
         let mapTiles = realm.objects('MapTile').filtered(filterStr);
 
@@ -138,6 +113,7 @@ class LoadMapOfflineScreen extends Component {
                     value: mapTiles[i].base64String
                 }
             })
+
             this.webView.postMessage(message)
         }
     }

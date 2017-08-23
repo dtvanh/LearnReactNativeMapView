@@ -56,7 +56,6 @@ osmSource.setTileLoadFunction(function(image, link) {
 
 
 
-
 var layer = new ol.layer.Tile({
     source: osmSource
   });
