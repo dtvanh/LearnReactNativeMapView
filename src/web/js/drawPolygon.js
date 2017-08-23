@@ -17,18 +17,17 @@ drawPolygon();
 //get data from RN
 document.addEventListener("message", function(event) {
     let message = JSON.parse(event.data);
-    alert("get DATA from LOCAL!");
-    if (message.type === CACHE_DATA) {
-        //drawPolygon(message.data);
-    } 
+    if (message.type === "Polygon") {
+        drawPolygon(message.data);
+    }
+    vectorSource.addFeature(polyFeature);
 }, false);
 function drawPolygon(dataOffline){
-	//Holds the Polygon feature
-    let data = JSON.parse(localStorage.getItem("fData"));
-    //let data = JSON.parse(dataOffline);
+    //let data = JSON.parse(localStorage.getItem("fData"));
+    let data = dataOffline;
 	if(!data){
 		//localStorage.setItem("fData", JSON.stringify(arrayRing));
-		data = arrayRing;
+		data = [];
 	}
 	polyFeature = new ol.Feature({
 			geometry: new ol.geom.Polygon(data)
@@ -50,8 +49,7 @@ map = new ol.Map({
             crossOrigin: 'anonymous'
         })
     }),
-    vectorLayer //When the vector layer is used both the features displays correctly.
-    //imageLayer //When the image layer is in use only the point feature is displayed.
+    vectorLayer
     ],
     view: new ol.View({
         center: [2952104.019976033, -3277504.823700756],
@@ -87,16 +85,20 @@ draw.on('drawend', function(evt) {
   var payload = '[' + esrijsonFormat.writeFeature(feature, {
     featureProjection: map.getView().getProjection()
   }) + ']';
-  var type = feature.getGeometry().getType();
+  var featureType = feature.getGeometry().getType();
   var obj = JSON.parse(payload);
   var rings = obj[0].geometry.rings[0];
-  var data = JSON.parse(localStorage.getItem("fData")) || [];
-  data.push(rings);
+  //var data = JSON.parse(localStorage.getItem("fData")) || [];
+  //data.push(rings);
   // Store
-	localStorage.setItem("type", type);
-	localStorage.setItem("fData", JSON.stringify(data));
-	feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
-    window.postMessage(JSON.stringify(data));
+	//localStorage.setItem("type", featureType);
+	//localStorage.setItem("fData", JSON.stringify(data));
+    feature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+    let message = JSON.stringify({
+        type: featureType,
+        data: rings
+    })
+    window.postMessage(message);
     // Retrieve
   //localStorage.getItem("type");
   //save data to Realm

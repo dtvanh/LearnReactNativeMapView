@@ -47,23 +47,50 @@ class DrawScreen extends Component {
     }
 
   _loadOfflineFromRealm() {
-
-        let polygons = realm.objects('Polygons');
-        for (let i = 0; i < polygons.length; i ++) {
+        //let filterStr = `type = ${"Polygon"}`;
+        //let polygons = realm.objects('Features').filtered(filterStr);
+        let features = realm.objects('Features');
+        let points = [];
+        let lineStrings = [];
+        let polygons = [];
+        for (let i = 0; i < features.length; i ++) {
+            if(features[i].type == "Point"){
+                points.push(features[i].data);
+            }else if(features[i].type == "LineString"){
+                lineStrings.push(features[i].data);
+            }else if(features[i].type == "Polygon"){
+                polygons.push(JSON.parse(features[i].data));                
+            }
+            // let message = JSON.stringify({
+            //     data: [{
+            //         type: "Point",
+            //         value: points
+            //     },{
+            //         type: "LineString",
+            //         value: lineStrings
+            //     },{
+            //         type: "Polygon",
+            //         value: polygons
+            //     }]
+            // })
 
             let message = JSON.stringify({
-                type: 'CACHE_DATA',
-                data: polygons[i]
+                type: 'Polygon',
+                data: polygons
             })
+
             this.webView.postMessage(message)
         }
     }
 
-  _onMessage(event) {    
-    Alert.alert("DATA: " + event.nativeEvent.data);
+  _onMessage(event) {
+    let webviewData = JSON.parse(event.nativeEvent.data);
+    Alert.alert("Save " + webviewData.type + "successful!");
     realm.write(() => {
-        realm.create('Polygons', {
-            data: event.nativeEvent.data
+        realm.create('Features', {
+            type: webviewData.type,
+            data: JSON.stringify(webviewData.data),
+            description: webviewData.type + " Description"
         });
     });
   }

@@ -16,22 +16,14 @@ MapTile.schema = {
     },
 };
 
-class Points extends Realm.Object {}
-Points.schema = {
-    name: 'Points',
+class Features extends Realm.Object {}
+Features.schema = {
+    name: 'Features',
     properties: {
-        lat: {type: 'double', default: 0},
-        lng: {type: 'double', default: 0},
-    },
-};
-
-class Polygons extends Realm.Object {}
-Polygons.schema = {
-    name: 'Polygons',
-    properties: {
-        user: {type: 'string', default: 'admin'},
+        type: {type: 'string', default: ''},
         data: {type: 'string', default: ''},
+        description: {type: 'string', default: ''}
     },
 };
 
-export default new Realm({schema: [ MapTile, Points, Polygons]});
+export default new Realm({schema: [ MapTile, Features]});
