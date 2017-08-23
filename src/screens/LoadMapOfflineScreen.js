@@ -53,7 +53,7 @@ class LoadMapOfflineScreen extends Component {
                     <Text>LOAD OFFLINE DATA</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={this._clearOfflineData}>
+                <TouchableOpacity onPress={this._clearOfflineData.bind(this)}>
                     <Text>CLEAR OFFLINE DATA</Text>
                 </TouchableOpacity>
 
@@ -96,6 +96,7 @@ class LoadMapOfflineScreen extends Component {
        });
 
        this.webView.postMessage(message);
+
     }
 
     _loadOfflineFromRealm() {
