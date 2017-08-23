@@ -90,7 +90,7 @@ draw.on('drawend', function(evt) {
   var type = feature.getGeometry().getType();
   var obj = JSON.parse(payload);
   var rings = obj[0].geometry.rings[0];
-  var data = JSON.parse(localStorage.getItem("fData"));
+  var data = JSON.parse(localStorage.getItem("fData")) || [];
   data.push(rings);
   // Store
 	localStorage.setItem("type", type);
