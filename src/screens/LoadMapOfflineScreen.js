@@ -100,7 +100,7 @@ class LoadMapOfflineScreen extends Component {
     }
 
     _loadOfflineFromRealm() {
-        let filterStr = `zoomLevel = ${14}`;
+        let filterStr = `zoomLevel = ${14} or zoomLevel = ${13} or zoomLevel = ${12}`;
 
         let mapTiles = realm.objects('MapTile').filtered(filterStr);
 

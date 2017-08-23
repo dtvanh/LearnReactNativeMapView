@@ -42,7 +42,7 @@ var map = new ol.Map({
     view: new ol.View({
       center: ol.proj.transform(
           [153.026330,-27.469695], 'EPSG:4326', 'EPSG:3857'),
-      zoom: 14
+      zoom: 12
     })
 });
 
