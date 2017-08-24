@@ -10,7 +10,7 @@ import {
 import realm from '../db/realm';
 
 const sourceWebOffline = require('../web/mapview_offline_mode.html');
-const sourceTest = require('../web/test.html');
+
 
 class LoadMapOfflineScreen extends Component {
 
