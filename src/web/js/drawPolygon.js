@@ -35,7 +35,7 @@ _layers.push(vectorLayer);
 
 map = new ol.Map({
     layers: _layers,
-    target: document.getElementById('olMap'),
+    target: document.getElementById('map'),
     controls: ol.control.defaults({
         attributionOptions: ({
             collapsible: false

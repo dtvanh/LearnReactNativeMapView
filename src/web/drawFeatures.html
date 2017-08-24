@@ -2,12 +2,13 @@
 <html>
   <head>
     <link rel="stylesheet" href="./css/draw.css" type="text/css">
+    <meta name="viewport" content="width=device-width">
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="./js/ol.js"></script>
   </head>
   <body>
-    <div id="olMap"></div>    
+    <div id="map" class="map"></div>   
     <form class="form-inline">
       <label>Geometry type &nbsp;</label>
       <select id="typeShape">
