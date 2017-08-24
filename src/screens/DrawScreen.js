@@ -85,7 +85,7 @@ class DrawScreen extends Component {
 
   _onMessage(event) {
     let webviewData = JSON.parse(event.nativeEvent.data);
-    Alert.alert("Save " + webviewData.type + "successful!");
+    Alert.alert("Save " + webviewData.type + " successful!");
     realm.write(() => {
         realm.create('Features', {
             type: webviewData.type,
