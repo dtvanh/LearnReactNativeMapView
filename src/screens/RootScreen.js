@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
 class RootScreen extends Component {
 
     static navigationOptions = {
-        title: 'MOB-34',
-      };
+        title: 'Render MapView',
+    };
 
     constructor(props) {
         super(props);

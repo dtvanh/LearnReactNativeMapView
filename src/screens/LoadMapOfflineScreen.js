@@ -14,6 +14,10 @@ const sourceWebOffline = require('../web/mapview_offline_mode.html');
 
 class LoadMapOfflineScreen extends Component {
 
+    static navigationOptions = {
+        title: 'Offline Map'
+    };
+    
     constructor() {
         super();
 
@@ -42,19 +46,21 @@ class LoadMapOfflineScreen extends Component {
 
     _renderGroupButtons() {
 
+        const { btnGroupContainer, btn } = styles;
+
         return (
-            <View style={styles.btnGroupContainer}>
+            <View style={btnGroupContainer}>
 
                 <TouchableOpacity onPress={this._refreshWebView.bind(this)}>
-                    <Text>REFRESH</Text>
+                    <Text style= { btn }>REFRESH</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={this._loadOfflineFromRealm.bind(this)}>
-                    <Text>LOAD OFFLINE DATA</Text>
+                <Text style= { btn }>LOAD OFFLINE DATA</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={this._clearOfflineData.bind(this)}>
-                    <Text>CLEAR OFFLINE DATA</Text>
+                    <Text style= { btn }>CLEAR WEB LOCALSTORAGE</Text>
                 </TouchableOpacity>
 
             </View>
@@ -71,8 +77,7 @@ class LoadMapOfflineScreen extends Component {
     //*********************** ACTIONS ***********************
     _refreshWebView() {
 
-        this._loadOfflineFromRealm();
-        //this._passRefreshRequest();
+        this.webView.reload();
     }
 
     _loadOfflineData() {
@@ -137,6 +142,11 @@ const styles = StyleSheet.create({
     webviewContainer: {
         flex: 0.7,
         alignItems: 'center',
+    },
+
+    btn: {
+        fontSize: 10,
+        padding: 5,
     }
 });
 

@@ -14,7 +14,7 @@ class ShowCurrentLocation extends Component {
 
     static navigationOptions = {
         title: 'Show Current Location',
-      };
+    };
 
     constructor(props) {
         super(props);

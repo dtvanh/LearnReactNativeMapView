@@ -58,8 +58,6 @@ document.addEventListener("message", function(event) {
 
         dataPassed.innerHTML = message.data;
     } else if (message.type === REFRESH) {
-        // dataPassed.innerHTML = 'asdfjklajsdfjkakjsdfalsdkfj';
-        // window.postMessage('yeahyeah cai nay tu webview nek !')
 
         map.refresh();
     } else if (message.type === CACHE_DATA) {
@@ -68,6 +66,7 @@ document.addEventListener("message", function(event) {
     } else if (message.type === CLEAR_LOCAL_STORAGE) {
 
         clearLocalStorage();
+        dataPassed.innerHTML = '';
     }
 }, false);
 
@@ -78,8 +77,7 @@ function saveTileMapToLocalStorage(key, value) {
       localStorage.setItem(key, value);
     } catch(e) {
       if (isQuotaExceeded(e)) {
-          alert('LocalStorage is FULL');
-          //clearLocalStorage();
+        dataPassed.innerHTML = 'Localstorage Full'  
       }
     }
 }

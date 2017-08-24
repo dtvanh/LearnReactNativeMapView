@@ -23,6 +23,10 @@ const initState = {
 
 class DownloadOfflineDataScreen extends Component {
 
+    static navigationOptions = {
+        title: 'Download Tile Map'
+    };
+
     constructor() {
         super();
 
@@ -259,7 +263,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-around',
-        backgroundColor: 'green'
+        padding: 20,
     },
 
     progressBar: {
