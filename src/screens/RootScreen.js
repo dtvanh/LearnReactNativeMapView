@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
     btn: {
         marginTop: 20,
-        fontSize: 30
+        fontSize: 20
 
     }
 
@@ -64,7 +64,15 @@ class RootScreen extends Component {
                     }}
                 >
                     <Text style={btn}>Draw Map</Text>    
-                </TouchableOpacity>                
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress= {() => {
+                        navigate('ShowLocation');
+                    }}
+                >
+                    <Text style={btn}>Show Current Location</Text>    
+                </TouchableOpacity>                     
             </View>
         )
     }
